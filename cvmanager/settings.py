@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'cvmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DATABASE_NAME', 'mysql'),
+        'USER': os.getenv('DATABASE_USER', 'root'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'mypassword'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),
+        'PORT': os.getenv('DATABASE_PORT', '3306'),
     }
 }
 
