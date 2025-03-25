@@ -1,0 +1,16 @@
+<!-- Navbar -->
+<nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+    <a href="/" class="text-xl font-semibold">CV Manager</a>
+    <div class="flex items-center gap-4">
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}<a href="{% url 'admin:index' %}" class="text-white hover:underline">Admin Site</a>{% endif %}
+            <a href="{% url "profile" %}" class="text-white hover:underline">Profile</a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="text-white hover:underline">Log Out</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="text-white hover:underline">Log In</a>
+        {% endif %}
+    </div>
+</nav>

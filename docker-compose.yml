@@ -24,6 +24,8 @@ services:
       - db
     networks:
       - djangoapp
+    env_file:
+      - .env
 
 volumes:
   mysql_data:
