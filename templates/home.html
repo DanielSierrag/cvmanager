@@ -1,6 +1,54 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home page | CV Manager{% endblock title %}
 
 {% block content %}
-<h1 class="text-center">¡Gestiona tu CV según la oferta a la que estas aplicando!</h1>
-<a href="{% url "manager:index" %}" class="btn btn-primary">¡IR!</a>
-{% endblock content %}
+    {% include "navbar.html" %}
+    
+    <!-- Hero Section -->
+    <section class="text-center py-16 bg-white shadow-md">
+        <h1 class="text-4xl font-bold">Manage Your CVs with Ease</h1>
+        <p class="mt-4 text-lg text-gray-600">A simple and effective way to store and organize your resumes.</p>
+        
+        <!-- Register Button -->
+        <a href="{% url 'register' %}" class="mt-6 inline-block px-6 py-3 bg-blue-500 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-blue-600 transition">
+            Get Started
+        </a>
+    </section>
+
+    <!-- Image Carousel -->
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'images/Asta.jpg' %}" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'images/artoria.jpg' %}" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'images/saitama.jpg' %}" class="d-block w-100" alt="...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Reviews -->
+    <section class="container mx-auto my-12 px-6">
+        <h2 class="text-3xl font-semibold text-center">What Our Users Say</h2>
+        <div class="grid md:grid-cols-3 gap-6 mt-6">
+            <div class="p-6 bg-white rounded-lg shadow-md text-center">
+                <p class="italic">"This platform has made CV management so much easier!"</p>
+                <h4 class="mt-4 font-semibold">- Jane Doe</h4>
+            </div>
+            <div class="p-6 bg-white rounded-lg shadow-md text-center">
+                <p class="italic">"I love the organization and security it offers."</p>
+                <h4 class="mt-4 font-semibold">- John Smith</h4>
+            </div>
+            <div class="p-6 bg-white rounded-lg shadow-md text-center">
+                <p class="italic">"Accessing my CVs anytime is a game changer!"</p>
+                <h4 class="mt-4 font-semibold">- Emily Johnson</h4>
+            </div>
+        </div>
+    </section>
+{% endblock %}

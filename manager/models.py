@@ -21,6 +21,9 @@ class Experience(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.role} in {self.entity}"
+
 
 class Degree(models.Model):
     LEVELS = [
@@ -33,6 +36,9 @@ class Degree(models.Model):
     timelapse = models.CharField(max_length=25, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} {self.level}"
 
 
 class Skill(models.Model):
@@ -47,11 +53,17 @@ class Skill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class About(models.Model):
     desc = models.TextField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s profile"
 
 
 class Reference(models.Model):
@@ -62,7 +74,11 @@ class Reference(models.Model):
         blank=True
     )
     email = models.EmailField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Template(models.Model):
@@ -71,7 +87,11 @@ class Template(models.Model):
         ("MINIMALIST", "MINIMALIST"),
     ]
 
-    name = models.CharField(max_length=30, blank=False, null=False)
+    name = models.CharField(
+        max_length=30, blank=False,
+        null=False
+        # null=False, unique=True
+    )
     category = models.CharField(choices=CATEGORIES, max_length=30, null=False)
     file = models.FileField(
         upload_to="media/templates/",
@@ -80,13 +100,19 @@ class Template(models.Model):
     )
     creted_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+
 
 class CurriculumVitae(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    experience = models.ManyToManyField(Experience)
-    degree = models.ManyToManyField(Degree)
-    skill = models.ManyToManyField(Skill)
+    experiences = models.ManyToManyField(Experience)
+    degrees = models.ManyToManyField(Degree)
+    skills = models.ManyToManyField(Skill)
     about = models.OneToOneField(About, on_delete=models.CASCADE)
     references = models.ManyToManyField(Reference)
     template = models.OneToOneField(Template, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s cv"
