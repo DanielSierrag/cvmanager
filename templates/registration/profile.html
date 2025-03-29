@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}{{ user.first_name|capfirst }}'s Profile{% endblock title %}
+{% block title %}{{ user.first_name|capfirst }}'s settings{% endblock title %}
 
 {% block content %}
 {% include "navbar.html" %}
 <div class="bg-white p-10 rounded-lg shadow-lg">
-    <h2 class="text-3xl font-semibold text-blue-600 text-center">Profile</h2>
+    <h2 class="text-3xl font-semibold text-blue-600 text-center">Settings</h2>
 
 
     <div class="d-flex p-2" style="justify-content: space-evenly;">

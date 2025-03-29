@@ -1,14 +1,31 @@
 <!-- Navbar -->
 <nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
-    <a href="/" class="text-xl font-semibold">CV Manager</a>
+    {% if user.is_authenticated %}<p class="text-xl font-semibold">CV manager</p>{% else %}<a href="/" class="text-xl font-semibold">CV Manager</a>{% endif %}
     <div class="flex items-center gap-4">
         {% if user.is_authenticated %}
-            {% if user.is_staff %}<a href="{% url 'admin:index' %}" class="text-white hover:underline">Admin Site</a>{% endif %}
-            <a href="{% url "profile" %}" class="text-white hover:underline">Profile</a>
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="text-white hover:underline">Log Out</button>
-            </form>
+            {% if user.is_staff %}
+                <a href="{% url 'admin:index' %}" class="text-white hover:underline">Admin Site</a>
+            {% endif %}
+
+            <!-- Dropdown Menu -->
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="flex items-center gap-2 focus:outline-none">
+                    <span>{{ user.username }}</span>
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                
+                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg py-2">
+                    <a href="{% url 'manager:index' %}" class="block px-4 py-2 hover:bg-gray-200">Dashboard</a>
+                    <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-gray-200">Settings</a>
+                    <form action="{% url 'logout' %}" method="post" class="block">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-200">Log Out</button>
+                    </form>
+                </div>
+            </div>
+
         {% else %}
             <a href="{% url 'login' %}" class="text-white hover:underline">Log In</a>
         {% endif %}

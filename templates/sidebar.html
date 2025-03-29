@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+{% block navbar %}{% endblock navbar %}
+<div class="flex">
+    <!-- Sidebar -->
+    <aside class="w-64 h-screen bg-[#f0f0f0] shadow-md p-6 fixed">
+        <ul class="space-y-4">
+            <li>
+                <a href="{% url 'manager:index' %}" class="block px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-300">About me</a>
+            </li>
+            <li>
+                <a href="{% url 'manager:experience_list' %}" class="block px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-300">Experiences</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-300">Studies</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 rounded-lg text-gray-800 hover:bg-gray-300">References</a>
+            </li>
+        </ul>
+    </aside>
+    
+    <!-- Contenido Principal -->
+    <div class="ml-64 flex-1 p-6 bg-white shadow-lg min-h-screen">
+       {% block sb_content %}{% endblock sb_content %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block script_tags %}<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>{% endblock script_tags %}

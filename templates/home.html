@@ -12,7 +12,7 @@
         <p class="mt-4 text-lg text-gray-600">A simple and effective way to store and organize your resumes.</p>
         
         <!-- Register Button -->
-        <a href="{% url 'register' %}" class="mt-6 inline-block px-6 py-3 bg-blue-500 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-blue-600 transition">
+        <a href="{% if user.is_authenticated %}{% url 'manager:index' %}{% else %}{% url 'register' %}{% endif %}" class="mt-6 inline-block px-6 py-3 bg-blue-500 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-blue-600 transition">
             Get Started
         </a>
     </section>
