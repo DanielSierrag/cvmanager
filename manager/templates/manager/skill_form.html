@@ -1,0 +1,39 @@
+{% extends "sidebar.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Experience {% if 'create' in request.path %}create{% elif 'update' %}update{% endif %}
+{% endblock title%}
+
+{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block sb_content %}
+<h1 class="text-center mb-3">
+    <strong>
+        {% if 'create' in request.path %}ADD{% elif 'update' %}UPDATE{% endif %}
+        AN SKILL
+    </strong>
+</h1>
+<form novalidate method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="fields">
+        <!-- name field -->
+        <label for="{{ form.name.id_for_label }}" class="ms-3">Name</label>
+        <div class="m-3 mt-1">
+            <input type="text" class="form-control" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}"
+            {% if form.name.value %}value="{{ form.name.value }}"{% endif %}>
+            {% if form.name.errors %}
+            <p class="text-red-500 text-sm">{{ form.name.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="m-3">
+            {{ form.expertise|as_crispy_field }}
+        </div>
+
+        <div class="m-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="{% url 'manager:skill_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</form>
+{% endblock sb_content %}

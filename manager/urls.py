@@ -63,4 +63,27 @@ urlpatterns = [
             success_url=reverse_lazy("manager:education_list")),
         name="education_delete"
     ),
+    path(
+        "skills",
+        views.SkillListView.as_view(),
+        name="skill_list"
+    ),
+    path(
+        "skill/create",
+        views.SkillCreateView.as_view(
+            success_url=reverse_lazy("manager:skill_list")),
+        name="skill_create"
+    ),
+    path(
+        "skill/<int:pk>/update",
+        views.SkillUpdateView.as_view(
+            success_url=reverse_lazy("manager:skill_list")),
+        name="skill_update"
+    ),
+    path(
+        "skill/<int:pk>/delete",
+        views.SkillDeleteView.as_view(
+            success_url=reverse_lazy("manager:skill_list")),
+        name="skill_delete"
+    ),
 ]

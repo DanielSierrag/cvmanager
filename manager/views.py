@@ -77,3 +77,26 @@ class EducationUpdateView(OwnerUpdateView):
 class EducationDeleteView(OwnerDeleteView):
     model = models.Education
     template_name = "manager/item_confirm_delete.html"
+
+
+class SkillListView(OwnerListView):
+    model = models.Skill
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by('-id')
+
+
+class SkillCreateView(OwnerCreateView):
+    model = models.Skill
+    form_class = forms.SkillForm
+
+
+class SkillUpdateView(OwnerUpdateView):
+    model = models.Skill
+    form_class = forms.SkillForm
+
+
+class SkillDeleteView(OwnerDeleteView):
+    model = models.Skill
+    template_name = "manager/item_confirm_delete.html"

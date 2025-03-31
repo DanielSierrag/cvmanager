@@ -116,3 +116,16 @@ class EducationForm(forms.ModelForm):
             instance.save()
 
         return instance
+
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = models.Skill
+        fields = ["name", "expertise"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('expertise', css_class='form-select')
+        )
