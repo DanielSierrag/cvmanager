@@ -40,4 +40,27 @@ urlpatterns = [
             success_url=reverse_lazy("manager:experience_list")),
         name="experience_delete"
     ),
+    path(
+        "educations",
+        views.EducationListView.as_view(),
+        name="education_list"
+    ),
+    path(
+        "education/create",
+        views.EducationCreateView.as_view(
+            success_url=reverse_lazy("manager:education_list")),
+        name="education_create"
+    ),
+    path(
+        "education/<int:pk>/update",
+        views.EducationUpdateView.as_view(
+            success_url=reverse_lazy("manager:education_list")),
+        name="education_update"
+    ),
+    path(
+        "education/<int:pk>/delete",
+        views.EducationDeleteView.as_view(
+            success_url=reverse_lazy("manager:education_list")),
+        name="education_delete"
+    ),
 ]

@@ -30,20 +30,20 @@ class Experience(models.Model):
         return f"{self.role} in {self.entity}"
 
 
-class Degree(models.Model):
+class Education(models.Model):
     LEVELS = [
         ("BACHELOR's DEGREE", "BACHELOR's DEGREE"),
         ("ASOCIATE's DEGREE", "ASOCIATE's DEGREE"),
         ("DIPLOMATE", "DIPLOMATE"),
         ("ESPECIALIZATION", "ESPECIALIZATION"),
     ]
-    minlength_validator_message = "The content is too short"
+    minlen_message = "The content is too short"
 
     level = models.CharField(choices=LEVELS, max_length=30, null=False)
     entity = models.CharField(max_length=50, null=False, validators=[
-                              validators.MinLengthValidator(5, minlength_validator_message)])
+                              validators.MinLengthValidator(5, minlen_message)])
     title = models.CharField(max_length=50, null=False, validators=[
-                             validators.MinLengthValidator(5, minlength_validator_message)])
+                             validators.MinLengthValidator(5, minlen_message)])
     timelapse = models.CharField(max_length=25, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -54,7 +54,7 @@ class Degree(models.Model):
 
 class Skill(models.Model):
     EXPERTISE = [
-        ("LOW", "LOW"),
+        ("BEGGINER", "BEGGINER"),
         ("INTERMEDIATE", "INTERMEDIATE"),
         ("ADVANCED", "ADVANCED"),
     ]
@@ -121,7 +121,7 @@ class Template(models.Model):
 class CurriculumVitae(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     experiences = models.ManyToManyField(Experience)
-    degrees = models.ManyToManyField(Degree)
+    educations = models.ManyToManyField(Education)
     skills = models.ManyToManyField(Skill)
     about = models.OneToOneField(About, on_delete=models.CASCADE)
     references = models.ManyToManyField(Reference)

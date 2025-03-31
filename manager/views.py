@@ -53,3 +53,27 @@ class ExperienceUpdateView(OwnerUpdateView):
 
 class ExperienceDeleteView(OwnerDeleteView):
     model = models.Experience
+    template_name = "manager/item_confirm_delete.html"
+
+
+class EducationListView(OwnerListView):
+    model = models.Education
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by('-id')
+
+
+class EducationCreateView(OwnerCreateView):
+    model = models.Education
+    form_class = forms.EducationForm
+
+
+class EducationUpdateView(OwnerUpdateView):
+    model = models.Education
+    form_class = forms.EducationForm
+
+
+class EducationDeleteView(OwnerDeleteView):
+    model = models.Education
+    template_name = "manager/item_confirm_delete.html"

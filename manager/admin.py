@@ -11,10 +11,10 @@ class ExperienceAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(models.Degree)
+@admin.register(models.Education)
 class DegreeAdmin(admin.ModelAdmin):
     list_display = [
-        field.name for field in models.Degree._meta.fields if field.name not in ["created_at", "id"]
+        field.name for field in models.Education._meta.fields if field.name not in ["created_at", "id"]
     ]
 
 
@@ -51,4 +51,4 @@ class CurriculumVitaeAdmin(admin.ModelAdmin):
     list_display = [
         field.name for field in models.CurriculumVitae._meta.fields if field.name not in ["created_at", "id"]
     ]
-    filter_horizontal = ("skills", "experiences", "degrees", "references")
+    filter_horizontal = ("skills", "experiences", "educations", "references")
