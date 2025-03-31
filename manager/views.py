@@ -1,21 +1,55 @@
+from .owner import OwnerCreateView, OwnerUpdateView, OwnerListView, OwnerDeleteView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from . import models
-from os import getenv
-
+from . import forms
 # Create your views here.
 
 
 @login_required
 def index(request):
-    cv_list = models.CurriculumVitae.objects.filter(user=request.user)
-    experiences_count = models.Experience.objects.count()
+    try:
+        about = models.About.objects.get(user=request.user)
+    except models.About.DoesNotExist as err:
+        print('User does not have about related object')
+        about = None
+
     return render(
         request,
         "manager/index.html",
-        context={
-            "cv_list": cv_list,
-            "experiences_count": experiences_count,
-        }
+        context={"about": about}
     )
+
+
+class AboutCreateView(OwnerCreateView):
+    model = models.About
+    fields = ['desc']
+
+
+class AboutUpdateView(OwnerUpdateView):
+    model = models.About
+    form_class = forms.AboutForm
+
+
+class ExperienceListView(OwnerListView):
+    model = models.Experience
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        return qs.order_by("-id")
+
+
+class ExperienceCreateView(OwnerCreateView):
+    model = models.Experience
+    form_class = forms.ExperienceForm
+
+
+class ExperienceUpdateView(OwnerUpdateView):
+    model = models.Experience
+    form_class = forms.ExperienceForm
+
+
+class ExperienceDeleteView(OwnerDeleteView):
+    model = models.Experience

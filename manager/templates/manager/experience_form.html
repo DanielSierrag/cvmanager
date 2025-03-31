@@ -1,0 +1,76 @@
+{% extends "sidebar.html" %}
+{% load static %}
+
+{% block title %}
+Experience {% if 'create' in request.path %}create{% elif 'update' %}update{% endif %}
+{% endblock title%}
+
+{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block sb_content %}
+<h1 class="text-center mb-3">
+    <strong>
+        {% if 'create' in request.path %}ADD{% elif 'update' %}UPDATE{% endif %}
+        AN EXPERIENCE
+    </strong>
+</h1>
+<form novalidate class="mt-3" action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="fields">
+        <!-- Role field -->
+        <div class="mb-3">
+            <label class="mb-1" for="{{ form.role.id_for_label }}">Role</label>
+            <input type="text" class="form-control" name="{{ form.role.name }}" id="{{ form.role.id_for_label }}"
+            {% if form.role.value %}value="{{ form.role.value }}" {% endif %}>
+            {% if form.role.errors %}
+            <p class="text-red-500 text-sm">{{ form.role.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Entity field -->
+        <div class="mb-3">
+            <label class="mb-1" for="{{ form.entity.id_for_label }}">Entity</label>
+            <input type="text" class="form-control" name="{{ form.entity.name }}" id="{{ form.entity.id_for_label }}"
+                {% if form.entity.value %}value="{{ form.entity.value }}" {% endif %}>
+            {% if form.entity.errors %}
+            <p class="text-red-500 text-sm">{{ form.entity.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Desc field -->
+         <div class="mb-3">
+             {{ form.desc }}
+             {% if form.desc.errors %}
+             <p class="text-red-500 text-sm">{{ form.desc.errors.0 }}</p>
+             {% endif %}
+         </div>
+
+        <div class="d flex justify-left">
+            <!-- since field -->
+            <label class="mb-1" for="{{ form.since.id_for_label }}">Since</label>
+            <div>
+                {{ form.since }}
+                {% if form.since.errors %}
+                <p class="text-red-500 text-sm">{{ form.since.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <p class="ms-2 mr-2"> - </p>
+
+            <!-- until field -->
+            <label class="mb-1" for="{{ form.until.id_for_label }}">Until</label>
+            <div>
+                {{ form.until }}
+                <p class="text-gray-500 text-sm">{{ form.until.help_text }}</p>
+                {% if form.until.errors %}
+                <p class="text-red-500 text-sm">{{ form.until.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="m-3">
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <a class="btn btn-secondary" href="{% url 'manager:experience_list' %}">Cancel</a>
+    </div>
+</form>
+{% endblock sb_content %}

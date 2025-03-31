@@ -14,9 +14,14 @@ class ProfileUser(User):
 
 
 class Experience(models.Model):
-    role = models.CharField(max_length=30, null=False)
-    entity = models.CharField(max_length=50, null=False)
-    desc = models.TextField(max_length=200, null=False)
+    minlen_message = "The content is too short"
+
+    role = models.CharField(max_length=30, null=False, validators=[
+                            validators.MinLengthValidator(5, minlen_message)])
+    entity = models.CharField(max_length=50, null=False, validators=[
+                              validators.MinLengthValidator(5, minlen_message)])
+    desc = models.TextField(max_length=700, null=False, validators=[
+                            validators.MinLengthValidator(10, minlen_message)])
     timelapse = models.CharField(max_length=25, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -27,12 +32,18 @@ class Experience(models.Model):
 
 class Degree(models.Model):
     LEVELS = [
-        ("DEGREE", "DEGREE"),
+        ("BACHELOR's DEGREE", "BACHELOR's DEGREE"),
+        ("ASOCIATE's DEGREE", "ASOCIATE's DEGREE"),
+        ("DIPLOMATE", "DIPLOMATE"),
+        ("ESPECIALIZATION", "ESPECIALIZATION"),
     ]
+    minlength_validator_message = "The content is too short"
 
     level = models.CharField(choices=LEVELS, max_length=30, null=False)
-    entity = models.CharField(max_length=50, null=False)
-    title = models.CharField(max_length=50, null=False)
+    entity = models.CharField(max_length=50, null=False, validators=[
+                              validators.MinLengthValidator(5, minlength_validator_message)])
+    title = models.CharField(max_length=50, null=False, validators=[
+                             validators.MinLengthValidator(5, minlength_validator_message)])
     timelapse = models.CharField(max_length=25, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,7 +59,8 @@ class Skill(models.Model):
         ("ADVANCED", "ADVANCED"),
     ]
 
-    name = models.CharField(max_length=15, null=False)
+    name = models.CharField(max_length=15, null=False, validators=[
+                            validators.MinLengthValidator(3, "The content is too short")])
     expertise = models.CharField(choices=EXPERTISE, max_length=30, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -58,7 +70,8 @@ class Skill(models.Model):
 
 
 class About(models.Model):
-    desc = models.TextField(max_length=200)
+    desc = models.TextField(max_length=800, validators=[validators.MinLengthValidator(
+        20, 'The about section must have at least 20 characters')])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -67,7 +80,8 @@ class About(models.Model):
 
 
 class Reference(models.Model):
-    name = models.CharField(max_length=50, null=False)
+    name = models.CharField(max_length=50, null=False, validators=[
+                            validators.MinLengthValidator(3, "The name must have at least 3 characters")])
     phone = models.IntegerField(
         null=False,
         validators=[validators.MaxValueValidator(9999999999999)],
