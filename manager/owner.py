@@ -11,7 +11,7 @@ class OwnerListView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(user=self.request.user)
+        return qs.filter(user=self.request.user.id)
 
 
 class OwnerDetailView(DetailView):
@@ -21,7 +21,7 @@ class OwnerDetailView(DetailView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(user=self.request.user)
+        return qs.filter(user=self.request.user.id)
 
 
 class OwnerCreateView(LoginRequiredMixin, CreateView):
@@ -49,7 +49,7 @@ class OwnerUpdateView(LoginRequiredMixin, UpdateView):
         print('update get_queryset called')
         """ Limit a User to only modifying their own data. """
         qs = super(OwnerUpdateView, self).get_queryset()
-        return qs.filter(user=self.request.user)
+        return qs.filter(user=self.request.user.id)
 
 
 class OwnerDeleteView(LoginRequiredMixin, DeleteView):
@@ -61,4 +61,4 @@ class OwnerDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         print('delete get_queryset called')
         qs = super(OwnerDeleteView, self).get_queryset()
-        return qs.filter(user=self.request.user)
+        return qs.filter(user=self.request.user.id)
