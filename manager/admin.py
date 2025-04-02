@@ -52,3 +52,12 @@ class CurriculumVitaeAdmin(admin.ModelAdmin):
         field.name for field in models.CurriculumVitae._meta.fields if field.name not in ["created_at", "id"]
     ]
     filter_horizontal = ("skills", "experiences", "educations", "references")
+
+
+@admin.register(models.UserDemographic)
+class UserDemographicAdmin(admin.ModelAdmin):
+    list_display = ['status', 'profession', 'user__email']
+    # Make inline for socials
+    search_fields = [
+        'user__username', 'user__first_name', 'user__last_name', 'status'
+    ]

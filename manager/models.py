@@ -1,16 +1,59 @@
-from django.db import models
-from django.contrib.auth.models import User
 from django.core import validators
+from django.conf import settings
+from django.db import models
 
 # Create your models here.
 
 
-class ProfileUser(User):
+class UserDemographic(models.Model):
+    STATUSES = [
+        ("FREELANCER", "FREELANCER"),
+        ("EMPLOYED", "EMPLOYED"),
+        ("OPEN TO  WORK", "OPEN TO  WORK"),
+        ("OPEN TO INTERVIEWS", "OPEN TO INTERVIEWS"),
+    ]
+    invalid_message = 'The content is too short'
+
     avatar = models.ImageField(upload_to="media/user/avatars")
-    user = models.ForeignKey(
-        to=User, on_delete=models.CASCADE,
-        related_name="profile"
+    adress = models.CharField(
+        max_length=20,
+        validators=[validators.MinLengthValidator(3, invalid_message)]
     )
+    phone = models.CharField(
+        max_length=30,
+    )
+    profession = models.CharField(
+        max_length=20,
+        validators=[validators.MinLengthValidator(3, invalid_message)]
+    )
+    status = models.CharField(max_length=50, choices=STATUSES)
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user.username}\'s info'
+
+
+class SocialMedia(models.Model):
+    SOCIALS = [
+        ("LinkedIn", "LinkedIn"),
+        ("x/Twitter", "x/Twitter"),
+        ("Facebook", "facebook"),
+        ("Portfolio", "portfolio"),
+    ]
+    name = models.CharField(max_length=20, choices=SOCIALS)
+    url = models.URLField()
+    user_data = models.ForeignKey(
+        UserDemographic,
+        on_delete=models.CASCADE,
+        related_name='user_socials'
+    )
+
+    def __str__(self):
+        return self.name
 
 
 class Experience(models.Model):
@@ -23,7 +66,8 @@ class Experience(models.Model):
     desc = models.TextField(max_length=700, null=False, validators=[
                             validators.MinLengthValidator(10, minlen_message)])
     timelapse = models.CharField(max_length=25, null=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -45,7 +89,8 @@ class Education(models.Model):
     title = models.CharField(max_length=50, null=False, validators=[
                              validators.MinLengthValidator(5, minlen_message)])
     timelapse = models.CharField(max_length=25, null=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -62,7 +107,8 @@ class Skill(models.Model):
     name = models.CharField(max_length=15, null=False, validators=[
                             validators.MinLengthValidator(3, "The content is too short")])
     expertise = models.CharField(choices=EXPERTISE, max_length=30, null=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -72,7 +118,8 @@ class Skill(models.Model):
 class About(models.Model):
     desc = models.TextField(max_length=800, validators=[validators.MinLengthValidator(
         20, 'The about section must have at least 20 characters')])
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -91,7 +138,8 @@ class Reference(models.Model):
         help_text="Just numbers, not spaces or special characters"
     )
     email = models.EmailField(blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -122,7 +170,8 @@ class Template(models.Model):
 
 
 class CurriculumVitae(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     experiences = models.ManyToManyField(Experience)
     educations = models.ManyToManyField(Education)
     skills = models.ManyToManyField(Skill)
