@@ -11,7 +11,7 @@ from . import forms
 def index(request):
     try:
         about = models.About.objects.get(user=request.user)
-    except models.About.DoesNotExist as err:
+    except models.About.DoesNotExist:
         print('User does not have about related object')
         about = None
 
@@ -32,6 +32,7 @@ class AboutUpdateView(OwnerUpdateView):
     form_class = forms.AboutForm
 
 
+# Epeciences section
 class ExperienceListView(OwnerListView):
     model = models.Experience
 
@@ -56,6 +57,7 @@ class ExperienceDeleteView(OwnerDeleteView):
     template_name = "manager/item_confirm_delete.html"
 
 
+# Education section
 class EducationListView(OwnerListView):
     model = models.Education
 
@@ -79,6 +81,7 @@ class EducationDeleteView(OwnerDeleteView):
     template_name = "manager/item_confirm_delete.html"
 
 
+# Skills section
 class SkillListView(OwnerListView):
     model = models.Skill
 
@@ -99,4 +102,28 @@ class SkillUpdateView(OwnerUpdateView):
 
 class SkillDeleteView(OwnerDeleteView):
     model = models.Skill
+    template_name = "manager/item_confirm_delete.html"
+
+
+# References section
+class ReferenceListView(OwnerListView):
+    model = models.Reference
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.order_by('-id')
+
+
+class ReferenceCreateView(OwnerCreateView):
+    model = models.Reference
+    form_class = forms.ReferenceForm
+
+
+class ReferenceUpdateView(OwnerUpdateView):
+    model = models.Reference
+    form_class = forms.ReferenceForm
+
+
+class ReferenceDeleteView(OwnerDeleteView):
+    model = models.Reference
     template_name = "manager/item_confirm_delete.html"

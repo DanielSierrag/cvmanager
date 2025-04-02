@@ -80,12 +80,15 @@ class About(models.Model):
 
 
 class Reference(models.Model):
-    name = models.CharField(max_length=50, null=False, validators=[
-                            validators.MinLengthValidator(3, "The name must have at least 3 characters")])
-    phone = models.IntegerField(
+    name = models.CharField(
+        max_length=50, null=False,
+        validators=[
+            validators.MinLengthValidator(3, "The name must have at least 3 characters")]
+    )
+    phone = models.CharField(
+        max_length=30,
         null=False,
-        validators=[validators.MaxValueValidator(9999999999999)],
-        blank=True
+        help_text="Just numbers, not spaces or special characters"
     )
     email = models.EmailField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

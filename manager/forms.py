@@ -1,7 +1,9 @@
+from utils.phone_number_validaiton import choices as country_code_choices
 from django.core.exceptions import ValidationError
 from crispy_forms.layout import Layout, Field
 from crispy_forms.helper import FormHelper
 from datetime import datetime
+import phonenumbers as pn
 from django import forms
 from . import models
 # Write your forms here
@@ -129,3 +131,54 @@ class SkillForm(forms.ModelForm):
         self.helper.layout = Layout(
             Field('expertise', css_class='form-select')
         )
+
+
+class ReferenceForm(forms.ModelForm):
+    COUNTRY_CODES = country_code_choices
+
+    country_code = forms.ChoiceField(
+        help_text='+1 for USA',
+        choices=COUNTRY_CODES
+    )
+    phone = forms.IntegerField(
+        widget=forms.NumberInput(),
+        required=True
+    )
+
+    class Meta:
+        model = models.Reference
+        fields = ['name', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('country_code', css_class='form-select'),
+            Field('phone', css_class='form-control m-1')
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        code = cleaned_data['country_code']
+        try:
+            phone = str(cleaned_data['phone'])
+            is_valid = pn.is_valid_number(pn.parse(f"+{code}{phone}"))
+            if not is_valid:
+                self.add_error('phone', error=f'{phone} is not a valid number')
+            else:
+                phone = f"+{code} {phone}"
+                cleaned_data['phone'] = phone
+        except (KeyError, pn.NumberParseException):
+            self.add_error('phone', error=f'Enter a valid number')
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.phone = self.cleaned_data['phone']
+
+        if commit:
+            instance.save()
+
+        return instance
